@@ -1,20 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Container, Row, Col } from 'react-bootstrap'
+// import { Container, Row, Col } from 'react-bootstrap'
 
 export class Task extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userID: 202923,
-            description : props.task.description,
-            date : props.task.date,
-            time : props.task.time,
-            taskDeadline : props.task.taskDeadline,
-            taskComplete : props.task.taskComplete,
-            inEditMode : false,
+            inEditMode : false
         }
-        // let {taskID, description, date, time}=this.state;
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -36,29 +29,46 @@ export class Task extends Component {
         this.setState({inEditMode : true});
     }
 
-    onChange = (event) => {
-        this.setState({ [event.target.name] : event.target.value })
-    };
+    editTask = (event)=>{
+	event.preventDefault();
+	const oldTaskID = this.props.task.taskID;
+	const newTask = this.refs.taskChange.value;
+	// const newDate = this.refs.dateChange.value;
+	// const newTime = this.refs.timeChange.value;
+	// const newDeadline = newDate + ' ' + newTime;
+	this.props.updateTask(oldTaskID, newTask);
+	this.setState ({inEditMode : false });
+    }
 
     render() {
-        const {taskID, description, taskDeadline}=this.props.task;
+        const {taskID, description}=this.props.task;
         let edit = <form>
-            <input type="text" name = "description" onChange={this.onChange} value = {this.state.description}/>
-            <input type="date" name = "date" onChange={this.onChange} value = {this.state.date}/>
-            <input type="time" name = "time" onChange={this.onChange} value = {this.state.time}/>
+            <input type="text" name = "description" ref = "taskChange" defaultValue = {description}/>
+            {/*<input type="date" name = "date" ref = "dateChange" defaultValue = {date}/>
+            <input type="time" name = "time" ref = "timeChange" defaultValue = {time}/>*/}
+	    <button onClick={this.editTask} style={btnStyle}>Edit</button>
         </form>
-        let stable = <Container onClick ={()=>{this.onEditClick()}}>
+        let stable = <div>
+			<div onClick={()=>{this.onEditClick()}}>
+			    {description}
+			</div>
+			<div>
+			    <button onClick={()=>this.props.delTask(taskID)} style={btnStyle}>delete</button>
+			</div>
+		     </div>
+	/*<Container onClick ={()=>{this.onEditClick()}}>
             <Row>
                 <Col sm={8}>{description}</Col>
                 <Col sm={4}>{taskDeadline}</Col>
             </Row>
-        </Container>
-         return (
+	    <Row>
+		<button onClick={()=>this.props.delTask(taskID)} style={btnStyle}>delete</button>
+	    </Row>
+        </Container>*/
+        return (
             <div style ={this.style()}>
                 <input type ="checkbox" onChange = {() => this.props.completionist(taskID, this.state)} checked={this.state.taskComplete}/>
                 {this.state.inEditMode? edit : stable}
-                <button onClick={() => {this.state.inEditMode?this.props.updateTask(taskID, this.state):this.props.delTask(taskID)}} style={btnStyle}>{this.state.inEditMode?"Edit":"delete"}                    
-                </button>
                 
             </div>
         );

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import TaskSetter from './tasksetter';
-// import Heading from './layout/Heading';
 import AddTask from './AddTask';
-// import UpdateTask from './components/UpdateTask';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import axios from 'axios';
 import {connection} from './Constants';
@@ -51,25 +49,23 @@ class TaskPage extends Component {
             });
     }
 
-    updateTask = (id, thisbody) => {
+    updateTask = (id, newTask) => {
         let newBody = {
-            userID: thisbody.userID,
+            userID: 202923,
             taskID: id,
-            date:thisbody.date,
-            time:thisbody.time,
-            description: thisbody.description,
-            taskDeadline: thisbody.taskDeadline,
-            taskComplete: thisbody.taskComplete
+            description: newTask,
+            // taskDeadline: newDeadline,
+            taskComplete: false
         }
         axios.put(`${connection}/${id}`, newBody)
             .then(res => {
                 let updatedTasks = this.state.tasks;
-                this.setState({ tasks: updatedTasks });
-            });
-        thisbody.inEditMode = false;
+		updatedTasks.splice(id-1, 1, res.data);
+                this.setState({ tasks : updatedTasks }) 
+	    });
     }
+
     render() {
-        console.log(this.state.tasks)
         return (
             <Router>
                 <div className="TaskPage">

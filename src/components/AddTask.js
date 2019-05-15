@@ -45,8 +45,8 @@ export class AddTask extends Component {
                     value={this.state.description}
                     onChange={this.onChange}
                 />
-                <input type="date" name="date" placeholder="deadline" value={this.state.date} onChange={this.onChange} />
-                <input type="time" name="time" value={this.state.time} onChange={this.onChange} />
+                {/*<input type="date" name="date" placeholder="deadline" value={this.state.date} onChange={this.onChange} />
+                <input type="time" name="time" value={this.state.time} onChange={this.onChange} />*/}
                 <input type="submit" value="submit"
                     className="btn"
                     style={{ flex: 1 }}
